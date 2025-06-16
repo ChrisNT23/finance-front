@@ -4,16 +4,9 @@ const instance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   headers: {
     'Content-Type': 'application/json',
+    'Accept': 'application/json'
   },
-  // Asegurarse de que axios transforme la respuesta JSON
-  transformResponse: [(data) => {
-    try {
-      return JSON.parse(data);
-    } catch (error) {
-      console.error('Error parsing response:', error);
-      return data;
-    }
-  }]
+  withCredentials: true
 });
 
 // Add a request interceptor
