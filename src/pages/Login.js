@@ -32,8 +32,15 @@ const Login = () => {
         password: formData.password,
       });
 
-      console.log('Respuesta del servidor:', response.data);
+      console.log('Respuesta completa del servidor:', response);
+      console.log('Datos de la respuesta:', response.data);
+      
+      if (!response.data || !response.data.token) {
+        throw new Error('No se recibió el token en la respuesta');
+      }
+
       const { token } = response.data;
+      console.log('Token recibido:', token);
       
       console.log('Dispatching token...');
       dispatch(setToken(token));
@@ -42,6 +49,11 @@ const Login = () => {
       navigate('/dashboard');
     } catch (error) {
       console.error('Error en login:', error);
+      console.error('Detalles del error:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status
+      });
       setError(error.response?.data?.message || 'Error al iniciar sesión');
     }
   };
