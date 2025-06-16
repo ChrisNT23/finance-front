@@ -26,15 +26,22 @@ const Login = () => {
     setError('');
 
     try {
+      console.log('Intentando login...');
       const response = await axios.post('/auth/login', {
         email: formData.email,
         password: formData.password,
       });
 
+      console.log('Respuesta del servidor:', response.data);
       const { token } = response.data;
+      
+      console.log('Dispatching token...');
       dispatch(setToken(token));
+      
+      console.log('Navegando a dashboard...');
       navigate('/dashboard');
     } catch (error) {
+      console.error('Error en login:', error);
       setError(error.response?.data?.message || 'Error al iniciar sesión');
     }
   };
