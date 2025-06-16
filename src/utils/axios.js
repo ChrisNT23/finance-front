@@ -5,6 +5,15 @@ const instance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  // Asegurarse de que axios transforme la respuesta JSON
+  transformResponse: [(data) => {
+    try {
+      return JSON.parse(data);
+    } catch (error) {
+      console.error('Error parsing response:', error);
+      return data;
+    }
+  }]
 });
 
 // Add a request interceptor

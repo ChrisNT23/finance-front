@@ -35,15 +35,22 @@ const Login = () => {
       console.log('Respuesta completa del servidor:', response);
       console.log('Datos de la respuesta:', response.data);
       
-      if (!response.data || !response.data.token) {
+      if (!response.data || typeof response.data !== 'object') {
+        throw new Error('Respuesta del servidor inválida');
+      }
+
+      const { token, user } = response.data;
+      
+      if (!token) {
         throw new Error('No se recibió el token en la respuesta');
       }
 
-      const { token } = response.data;
       console.log('Token recibido:', token);
+      console.log('Datos del usuario:', user);
       
-      console.log('Dispatching token...');
       dispatch(setToken(token));
+      
+      localStorage.setItem('user', JSON.stringify(user));
       
       console.log('Navegando a dashboard...');
       navigate('/dashboard');
