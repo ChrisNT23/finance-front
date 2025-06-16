@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { theme } from '../theme';
+import axios from '../utils/axios';
+import { useSelector } from 'react-redux';
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
   const [newCategory, setNewCategory] = useState({ name: '', type: 'expense' });
   const [error, setError] = useState('');
+  const token = useSelector(state => state.auth.token);
 
   useEffect(() => {
     fetchCategories();
@@ -12,19 +15,12 @@ const Categories = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/categories', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
+      const response = await axios.get('/categories', {
+        headers: { Authorization: `Bearer ${token}` },
       });
-      if (!response.ok) {
-        throw new Error('Error al obtener las categorías');
-      }
-      const data = await response.json();
-      setCategories(Array.isArray(data) ? data : []);
+      setCategories(response.data);
     } catch (error) {
       console.error('Error fetching categories:', error);
-      setError(error.message);
     }
   };
 
@@ -33,24 +29,13 @@ const Categories = () => {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/categories', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify(newCategory),
+      const response = await axios.post('/categories', newCategory, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || 'Error al crear la categoría');
-      }
-
+      setCategories([...categories, response.data]);
       setNewCategory({ name: '', type: 'expense' });
-      fetchCategories();
     } catch (error) {
-      setError(error.message);
+      setError(error.response?.data?.message || 'Error al crear la categoría');
     }
   };
 
@@ -60,21 +45,12 @@ const Categories = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/categories/${categoryId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
+      await axios.delete(`/categories/${categoryId}`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || 'Error al eliminar la categoría');
-      }
-
-      fetchCategories();
+      setCategories(categories.filter(cat => cat._id !== categoryId));
     } catch (error) {
-      setError(error.message);
+      setError(error.response?.data?.message || 'Error al eliminar la categoría');
     }
   };
 

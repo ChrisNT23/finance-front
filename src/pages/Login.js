@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { theme } from '../theme';
+import { useDispatch } from 'react-redux';
+import { setToken } from '../redux/authSlice';
+import axios from '../utils/axios';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +12,7 @@ const Login = () => {
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setFormData({
@@ -22,42 +26,16 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+      const response = await axios.post('/auth/login', {
+        email: formData.email,
+        password: formData.password,
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Error al iniciar sesión');
-      }
-
-      if (!data.token) {
-        throw new Error('No se recibió el token de autenticación');
-      }
-
-      // Guardar el token y los datos del usuario
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      
-      // Verificar que el token se guardó correctamente
-      const savedToken = localStorage.getItem('token');
-      if (!savedToken) {
-        throw new Error('Error al guardar el token');
-      }
-
-      // Navegar directamente al dashboard
+      const { token } = response.data;
+      dispatch(setToken(token));
       navigate('/dashboard');
-    } catch (err) {
-      console.error('Login error:', err);
-      setError(err.message);
-      // Limpiar el token si hay error
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+    } catch (error) {
+      setError(error.response?.data?.message || 'Error al iniciar sesión');
     }
   };
 

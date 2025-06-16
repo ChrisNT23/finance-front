@@ -25,7 +25,7 @@ import {
   useTheme,
 } from '@mui/material';
 import { Delete as DeleteIcon, Edit as EditIcon, Add as AddIcon } from '@mui/icons-material';
-import axios from 'axios';
+import axios from '../utils/axios';
 import { useSelector } from 'react-redux';
 import { theme } from '../theme';
 
@@ -59,7 +59,7 @@ function Transactions() {
 
   const fetchTransactions = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/transactions', {
+      const response = await axios.get('/transactions', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTransactions(response.data);
@@ -72,7 +72,7 @@ function Transactions() {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/categories', {
+      const response = await axios.get('/categories', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCategories(response.data);
@@ -132,23 +132,14 @@ function Transactions() {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/transactions', {
-        method: 'POST',
+      const response = await axios.post('/transactions', {
+        ...newTransaction,
+        amount: Number(newTransaction.amount),
+      }, {
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          ...newTransaction,
-          amount: Number(newTransaction.amount),
-        }),
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Error al crear la transacción');
-      }
 
       setNewTransaction({
         description: '',
@@ -159,7 +150,7 @@ function Transactions() {
       });
       fetchTransactions();
     } catch (error) {
-      setError(error.message);
+      setError(error.response?.data?.message || 'Error al crear la transacción');
     }
   };
 
@@ -169,7 +160,7 @@ function Transactions() {
     }
 
     try {
-      await axios.delete(`http://localhost:5000/api/transactions/${id}`, {
+      await axios.delete(`/transactions/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchTransactions();

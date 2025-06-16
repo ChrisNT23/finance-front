@@ -14,6 +14,8 @@ import {
   ArcElement,
 } from 'chart.js';
 import { Line, Bar, Doughnut } from 'react-chartjs-2';
+import axios from '../utils/axios';
+import { useSelector } from 'react-redux';
 
 ChartJS.register(
   CategoryScale,
@@ -31,6 +33,7 @@ const Dashboard = () => {
   const [summary, setSummary] = useState(null);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -49,11 +52,8 @@ const Dashboard = () => {
         return;
       }
 
-      const response = await fetch('http://localhost:5000/api/transactions/summary', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+      const response = await axios.get('/transactions/summary', {
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.status === 401) {
@@ -67,11 +67,12 @@ const Dashboard = () => {
         throw new Error(errorData.message || 'Error al obtener el resumen');
       }
 
-      const data = await response.json();
-      setSummary(data);
+      setSummary(response.data);
     } catch (error) {
       console.error('Error fetching summary:', error);
       setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 

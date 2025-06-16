@@ -21,7 +21,7 @@ import {
   ArcElement,
 } from 'chart.js';
 import { Bar, Pie } from 'react-chartjs-2';
-import axios from 'axios';
+import axios from '../utils/axios';
 import { useSelector } from 'react-redux';
 
 ChartJS.register(
@@ -51,7 +51,7 @@ function Statistics() {
   const fetchStatistics = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/transactions/statistics?timeRange=${timeRange}`,
+        `/transactions/statistics?timeRange=${timeRange}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
