@@ -111,10 +111,10 @@ const Navbar = () => {
         <span style={{color: theme.colors.primary, fontSize: '2rem', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: theme.spacing.sm, cursor: 'pointer'}} onClick={() => handleNavClick('/')}>FinancePlan</span>
         <div className="desktop-nav" style={{display: 'flex', gap: theme.spacing.xl, alignItems: 'center'}}>
           <div className="nav-links" style={{display: 'flex', gap: theme.spacing.xl, alignItems: 'center'}}>
-            <a href="/dashboard" style={{color: theme.colors.text, textDecoration: 'none'}}>Dashboard</a>
-            <a href="/transactions" style={{color: theme.colors.text, textDecoration: 'none'}}>Transacciones</a>
-            <a href="/categories" style={{color: theme.colors.text, textDecoration: 'none'}}>Categorías</a>
-            <a href="/statistics" style={{color: theme.colors.text, textDecoration: 'none'}}>Estadísticas</a>
+            <Link to="/dashboard" style={{color: theme.colors.text, textDecoration: 'none'}}>Dashboard</Link>
+            <Link to="/transactions" style={{color: theme.colors.text, textDecoration: 'none'}}>Transacciones</Link>
+            <Link to="/categories" style={{color: theme.colors.text, textDecoration: 'none'}}>Categorías</Link>
+            <Link to="/statistics" style={{color: theme.colors.text, textDecoration: 'none'}}>Estadísticas</Link>
           </div>
           {isAuthenticated && (
             <button onClick={handleLogout} style={{background: 'none', border: 'none', color: theme.colors.error, fontWeight: 600, cursor: 'pointer'}}>Salir</button>
@@ -124,10 +124,10 @@ const Navbar = () => {
       {/* Mobile menu */}
       {isMenuOpen && (
         <div className="mobile-nav" style={{display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem 0'}}>
-          <a href="/dashboard" onClick={() => handleNavClick('/dashboard')}>Dashboard</a>
-          <a href="/transactions" onClick={() => handleNavClick('/transactions')}>Transacciones</a>
-          <a href="/categories" onClick={() => handleNavClick('/categories')}>Categorías</a>
-          <a href="/statistics" onClick={() => handleNavClick('/statistics')}>Estadísticas</a>
+          <Link to="/dashboard" onClick={() => handleNavClick('/dashboard')}>Dashboard</Link>
+          <Link to="/transactions" onClick={() => handleNavClick('/transactions')}>Transacciones</Link>
+          <Link to="/categories" onClick={() => handleNavClick('/categories')}>Categorías</Link>
+          <Link to="/statistics" onClick={() => handleNavClick('/statistics')}>Estadísticas</Link>
           {isAuthenticated && (
             <button onClick={handleLogout} style={{background: 'none', border: 'none', color: theme.colors.error, fontWeight: 600, cursor: 'pointer'}}>Salir</button>
           )}
