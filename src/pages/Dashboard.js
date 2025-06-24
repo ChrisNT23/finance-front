@@ -51,26 +51,19 @@ const Dashboard = () => {
         navigate('/login');
         return;
       }
-
+  
       const response = await axios.get('/transactions/summary', {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      if (response.status === 401) {
+  
+      setSummary(response.data);
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
         localStorage.removeItem('token');
         navigate('/login');
         return;
       }
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Error al obtener el resumen');
-      }
-
-      setSummary(response.data);
-    } catch (error) {
-      console.error('Error fetching summary:', error);
-      setError(error.message);
+      setError(error.response?.data?.message || error.message || 'Error al obtener el resumen');
     } finally {
       setLoading(false);
     }
