@@ -202,40 +202,36 @@ const Dashboard = () => {
   };
 
   return (
-    <div style={containerStyle}>
+    <div className="responsive-container">
       <h1 style={titleStyle}>Dashboard</h1>
-      
-      <div style={cardsContainerStyle}>
-        <div style={cardStyle}>
+      <div className="grid" style={cardsContainerStyle}>
+        <div className="card">
           <h3 style={cardTitleStyle}>Ingresos Totales</h3>
           <p style={{...cardValueStyle, color: '#10B981'}}>
             {formatAmount(summary.totalIncome)}
           </p>
         </div>
-        <div style={cardStyle}>
+        <div className="card">
           <h3 style={cardTitleStyle}>Gastos Totales</h3>
           <p style={{...cardValueStyle, color: '#EF4444'}}>
             {formatAmount(summary.totalExpenses)}
           </p>
         </div>
-        <div style={cardStyle}>
+        <div className="card">
           <h3 style={cardTitleStyle}>Balance</h3>
           <p style={{...cardValueStyle, color: summary.balance >= 0 ? '#10B981' : '#EF4444'}}>
             {formatAmount(summary.balance)}
           </p>
         </div>
       </div>
-
-      <div style={chartContainerStyle}>
+      <div className="card">
         <h2 style={chartTitleStyle}>Tendencias Mensuales</h2>
         <Line
           data={monthlyData}
           options={{
             responsive: true,
             plugins: {
-              legend: {
-                position: 'top',
-              },
+              legend: { position: 'top' },
               tooltip: {
                 callbacks: {
                   label: function(context) {
@@ -256,17 +252,14 @@ const Dashboard = () => {
           }}
         />
       </div>
-
-      <div style={chartContainerStyle}>
+      <div className="card">
         <h2 style={chartTitleStyle}>Distribución por Categoría</h2>
         <Doughnut
           data={categoryData}
           options={{
             responsive: true,
             plugins: {
-              legend: {
-                position: 'right',
-              },
+              legend: { position: 'right' },
               tooltip: {
                 callbacks: {
                   label: function(context) {
@@ -281,17 +274,14 @@ const Dashboard = () => {
           }}
         />
       </div>
-
-      <div style={chartContainerStyle}>
+      <div className="card">
         <h2 style={chartTitleStyle}>Balance Mensual</h2>
         <Line
           data={balanceData}
           options={{
             responsive: true,
             plugins: {
-              legend: {
-                position: 'top',
-              },
+              legend: { position: 'top' },
               tooltip: {
                 callbacks: {
                   label: function(context) {

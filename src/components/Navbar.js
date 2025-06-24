@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { theme } from '../theme';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,6 +11,12 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
+  };
+
+  // Responsive: close menu on navigation
+  const handleNavClick = (path) => {
+    setIsMenuOpen(false);
+    navigate(path);
   };
 
   const navStyle = {
@@ -100,57 +107,46 @@ const Navbar = () => {
   }
 
   return (
-    <nav style={navStyle}>
-      <div style={containerStyle}>
-        <Link to="/" style={logoStyle}>
-          <span role="img" aria-label="money">💰</span>
-          FinancePlan
-        </Link>
-
-        <button
-          style={mobileMenuButtonStyle}
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          <span role="img" aria-label="menu">☰</span>
+    <nav className="responsive-container" style={{backgroundColor: theme.colors.surface, boxShadow: theme.shadows.sm, position: 'sticky', top: 0, zIndex: 1000, padding: 0}}>
+      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', minHeight: '56px'}}>
+        <span style={{color: theme.colors.primary, fontSize: '2rem', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: theme.spacing.sm, cursor: 'pointer'}} onClick={() => handleNavClick('/')}>FinancePlan</span>
+        <div className="desktop-nav" style={{display: 'flex', gap: theme.spacing.xl, alignItems: 'center'}}>
+          <div className="nav-links" style={{display: 'flex', gap: theme.spacing.xl, alignItems: 'center'}}>
+            <a href="/dashboard" style={{color: theme.colors.text, textDecoration: 'none'}}>Dashboard</a>
+            <a href="/transactions" style={{color: theme.colors.text, textDecoration: 'none'}}>Transacciones</a>
+            <a href="/categories" style={{color: theme.colors.text, textDecoration: 'none'}}>Categorías</a>
+            <a href="/statistics" style={{color: theme.colors.text, textDecoration: 'none'}}>Estadísticas</a>
+          </div>
+          {isAuthenticated && (
+            <button onClick={handleLogout} style={{background: 'none', border: 'none', color: theme.colors.error, fontWeight: 600, cursor: 'pointer'}}>Salir</button>
+          )}
+        </div>
+        <button className="mobile-menu-btn" style={{display: 'none', background: 'none', border: 'none', cursor: 'pointer'}} onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <MenuIcon fontSize="large" />
         </button>
-
-        <div style={navLinksStyle}>
-          {isAuthenticated ? (
-            <>
-              <Link to="/dashboard" style={linkStyle}>Dashboard</Link>
-              <Link to="/transactions" style={linkStyle}>Transacciones</Link>
-              <Link to="/categories" style={linkStyle}>Categorías</Link>
-              <button onClick={handleLogout} style={buttonStyle}>
-                Cerrar Sesión
-              </button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" style={linkStyle}>Iniciar Sesión</Link>
-              <Link to="/register" style={buttonStyle}>Registrarse</Link>
-            </>
-          )}
-        </div>
-
-        <div style={mobileMenuStyle}>
-          {isAuthenticated ? (
-            <>
-              <Link to="/dashboard" style={linkStyle}>Dashboard</Link>
-              <Link to="/transactions" style={linkStyle}>Transacciones</Link>
-              <Link to="/categories" style={linkStyle}>Categorías</Link>
-              <button onClick={handleLogout} style={buttonStyle}>
-                Cerrar Sesión
-              </button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" style={linkStyle}>Iniciar Sesión</Link>
-              <Link to="/register" style={buttonStyle}>Registrarse</Link>
-            </>
-          )}
-        </div>
       </div>
+      {/* Mobile menu */}
+      {isMenuOpen && (
+        <div className="mobile-nav" style={{display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem 0'}}>
+          <a href="/dashboard" onClick={() => handleNavClick('/dashboard')}>Dashboard</a>
+          <a href="/transactions" onClick={() => handleNavClick('/transactions')}>Transacciones</a>
+          <a href="/categories" onClick={() => handleNavClick('/categories')}>Categorías</a>
+          <a href="/statistics" onClick={() => handleNavClick('/statistics')}>Estadísticas</a>
+          {isAuthenticated && (
+            <button onClick={handleLogout} style={{background: 'none', border: 'none', color: theme.colors.error, fontWeight: 600, cursor: 'pointer'}}>Salir</button>
+          )}
+        </div>
+      )}
+      <style>{`
+        @media (max-width: 900px) {
+          .desktop-nav { display: none !important; }
+          .mobile-menu-btn { display: block !important; }
+        }
+        @media (min-width: 901px) {
+          .mobile-menu-btn, .mobile-nav { display: none !important; }
+          .desktop-nav { display: flex !important; }
+        }
+      `}</style>
     </nav>
   );
 };

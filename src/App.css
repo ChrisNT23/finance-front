@@ -36,3 +36,82 @@
     transform: rotate(360deg);
   }
 }
+
+/* --- Global Responsive Styles --- */
+body, html, #root {
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f8fafc;
+}
+
+.responsive-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.card {
+  background: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.flex {
+  display: flex;
+  gap: 1rem;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .responsive-container {
+    padding: 0.5rem;
+  }
+  .card {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .responsive-container {
+    padding: 0.25rem;
+  }
+  .card {
+    padding: 0.5rem;
+  }
+  .flex {
+    flex-direction: column !important;
+    gap: 0.5rem;
+  }
+  .grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+  h1, h2, h3 {
+    font-size: 1.2rem !important;
+  }
+  label, input, button, p, span, a {
+    font-size: 1rem !important;
+  }
+}
+
+/* Utility for horizontal scroll on tables/lists */
+.responsive-table {
+  width: 100%;
+  overflow-x: auto;
+  display: block;
+}
