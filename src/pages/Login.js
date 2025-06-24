@@ -146,7 +146,7 @@ const Login = () => {
   };
 
   return (
-    <div className="responsive-container" style={containerStyle}>
+    <div style={containerStyle}>
       <h1 style={titleStyle}>Iniciar Sesión</h1>
       <form onSubmit={handleSubmit} style={formStyle}>
         <div style={inputGroupStyle}>
@@ -181,9 +181,9 @@ const Login = () => {
           Iniciar Sesión
         </button>
         {error && <p style={errorStyle}>{error}</p>}
-        <a href="/register" style={linkStyle}>
+        <Link to="/register" style={linkStyle}>
           ¿No tienes una cuenta? Regístrate
-        </a>
+        </Link>
       </form>
     </div>
   );

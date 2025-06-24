@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { theme } from '../theme';
-import MenuIcon from '@mui/icons-material/Menu';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -121,9 +120,6 @@ const Navbar = () => {
             <button onClick={handleLogout} style={{background: 'none', border: 'none', color: theme.colors.error, fontWeight: 600, cursor: 'pointer'}}>Salir</button>
           )}
         </div>
-        <button className="mobile-menu-btn" style={{display: 'none', background: 'none', border: 'none', cursor: 'pointer'}} onClick={() => setIsMenuOpen(!isMenuOpen)}>
-          <MenuIcon fontSize="large" />
-        </button>
       </div>
       {/* Mobile menu */}
       {isMenuOpen && (
@@ -137,16 +133,6 @@ const Navbar = () => {
           )}
         </div>
       )}
-      <style>{`
-        @media (max-width: 900px) {
-          .desktop-nav { display: none !important; }
-          .mobile-menu-btn { display: block !important; }
-        }
-        @media (min-width: 901px) {
-          .mobile-menu-btn, .mobile-nav { display: none !important; }
-          .desktop-nav { display: flex !important; }
-        }
-      `}</style>
     </nav>
   );
 };

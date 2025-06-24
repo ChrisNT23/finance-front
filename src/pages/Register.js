@@ -123,7 +123,7 @@ const Register = () => {
   };
 
   return (
-    <div className="responsive-container" style={containerStyle}>
+    <div style={containerStyle}>
       <h1 style={titleStyle}>Crear Cuenta</h1>
       <form onSubmit={handleSubmit} style={formStyle}>
         <div style={inputGroupStyle}>
@@ -186,9 +186,9 @@ const Register = () => {
           Registrarse
         </button>
         {error && <p style={errorStyle}>{error}</p>}
-        <a href="/login" style={linkStyle}>
+        <Link to="/login" style={linkStyle}>
           ¿Ya tienes una cuenta? Inicia sesión
-        </a>
+        </Link>
       </form>
     </div>
   );
